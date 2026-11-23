@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#120d0a">
+<title>Maison de Parfum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: quiet-luxury boutique, warm, quick to buy from a phone
+   IDEA: a perfumer's vitrine — posters lit in a dark display case
+   PICTURE: fanned stack of the house's own posters; then the catalogue itself
+   COLOUR and TYPE: brand espresso-black + champagne gold (from the logo); Cormorant Garamond + Manrope
+   LAYOUT: mobile-first — 2-col grid, bottom-sheet product view, sticky cart bar, Instagram DM checkout */
+:root{color-scheme:dark;--bg:#120d0a;--bg2:#1b140f;--card:#211812;--line:#3a2c20;--ink:#f3e9dc;--mute:#b8a690;--gold:#c9a36a;--gold2:#e8cd98;--dark:#1a120c;--serif:"Cormorant Garamond",Georgia,serif;--sans:Manrope,system-ui,sans-serif;--sb:env(safe-area-inset-bottom,0px)}
+:root[data-theme=light],:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--sans);overflow-x:clip}
+body.lock{overflow:hidden}
+img{display:block;max-width:100%}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
+h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.05;margin:0;text-wrap:balance}
+.wrap{max-width:1240px;margin:0 auto}
+.band{padding:clamp(28px,5vw,72px) max(4vw,14px)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 20px;border-radius:999px;border:1px solid var(--gold);background:var(--gold);color:var(--dark);font-weight:700;font-size:15px;text-decoration:none;text-align:center;line-height:1.2}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:transparent;color:var(--gold2)}
+.btn svg{width:20px;height:20px;flex:none}
+.small{font-size:13px;color:var(--mute)}
+
+/* header */
+header{position:sticky;top:0;z-index:20;background:rgba(18,13,10,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.hd{display:flex;align-items:center;gap:10px;padding:8px max(4vw,14px);max-width:1340px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);margin-right:auto}
+.brand img{width:40px;height:40px;border-radius:50%}
+.brand b{font:600 20px/1 var(--serif);letter-spacing:.03em;white-space:nowrap}
+nav{display:none;gap:22px}
+nav a{color:var(--mute);text-decoration:none;font-size:15px}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px}
+.lang button{border:0;background:none;min-width:40px;height:36px;border-radius:999px;font-size:13px;font-weight:700;color:var(--mute)}
+.lang button[aria-pressed=true]{background:var(--gold);color:var(--dark)}
+.iconbtn{position:relative;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:none;display:grid;place-items:center;flex:none}
+.iconbtn svg{width:21px;height:21px}
+.badge{position:absolute;top:-4px;right:-4px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:var(--gold);color:var(--dark);font-size:12px;font-weight:700;display:grid;place-items:center}
+.badge:empty{display:none}
+
+/* hero */
+.hero{background:radial-gradient(ellipse at 70% 30%,#3a2717 0%,transparent 62%),var(--bg);padding-bottom:12px}
+.hero .wrap{display:grid;gap:18px}
+.fan{position:relative;height:clamp(180px,50vw,460px)}
+.fan img{position:absolute;top:50%;left:50%;width:46%;aspect-ratio:20/21;object-fit:cover;object-position:top;border-radius:10px;box-shadow:0 24px 50px rgba(0,0,0,.6);border:1px solid #4a3828}
+.fan img:nth-child(1){transform:translate(-100%,-48%) rotate(-8deg)}
+.fan img:nth-child(2){transform:translate(0%,-48%) rotate(8deg)}
+.fan img:nth-child(3){transform:translate(-50%,-52%);z-index:2;width:50%}
+.hero h1{font-size:clamp(36px,9vw,68px)}
+.hero p{color:var(--mute);margin:10px 0 18px;max-width:34em}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.facts span{border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;color:var(--gold2)}
+
+/* catalogue */
+.cathead{display:grid;gap:12px;margin-bottom:16px}
+.cathead h2{font-size:clamp(30px,7vw,46px)}
+.search{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:0 14px;background:var(--bg2)}
+.search svg{width:18px;height:18px;color:var(--mute);flex:none}
+.search input{flex:1;border:0;background:none;height:46px;font-size:16px;outline:none}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 calc(-1*max(4vw,14px));padding:0 max(4vw,14px)}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--mute);font-size:14px}
+.chips button[aria-pressed=true]{border-color:var(--gold);color:var(--gold2);background:rgba(201,163,106,.12)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);padding:0;text-align:left;display:flex;flex-direction:column}
+.card .im{position:relative;background:#000}
+.card img{width:100%;aspect-ratio:20/21;object-fit:cover;object-position:top}
+.card .new{position:absolute;top:8px;left:8px}
+.new{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--gold);color:var(--dark);font-size:11px;font-weight:700}
+.cb{padding:10px 12px 12px;display:grid;gap:3px}
+.cb .b{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cb h3{font-size:20px;line-height:1.1}
+.cb .p{font-weight:700;color:var(--gold2);font-size:15px;margin-top:2px;white-space:nowrap}
+.empty{color:var(--mute);text-align:center;padding:30px 0}
+
+/* how */
+.how{background:var(--bg2);border-block:1px solid var(--line)}
+.how h2{font-size:clamp(30px,7vw,46px)}
+.steps{display:grid;gap:18px;margin-top:20px}
+.step{border-top:1px solid var(--gold);padding-top:12px}
+.step b{font:500 34px/1 var(--serif);color:var(--gold)}
+.step h3{font-size:24px;margin:6px 0 4px}
+.step p{color:var(--mute);margin:0}
+.vers{display:grid;gap:12px;margin-top:26px}
+.vers div{border:1px solid var(--line);border-radius:12px;padding:14px}
+.vers b{color:var(--gold2)}
+.vers p{margin:4px 0 0;color:var(--mute);font-size:15px}
+
+footer{padding-bottom:calc(90px + var(--sb))}
+footer .wrap{display:grid;gap:18px}
+.fb{display:flex;gap:14px;align-items:center}
+.fb img{width:72px;border-radius:50%}
+.fb b{font:500 26px/1.1 var(--serif);display:block}
+.contacts a{display:inline-flex;align-items:center;gap:8px;color:var(--gold2);text-decoration:none;min-height:44px}
+
+/* overlay pieces */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:40;opacity:0;pointer-events:none;transition:opacity .25s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;z-index:50;left:0;right:0;bottom:0;max-height:94dvh;background:var(--bg2);border-radius:18px 18px 0 0;border-top:1px solid var(--line);transform:translateY(105%);transition:transform .3s ease;display:flex;flex-direction:column}
+.sheet.on{transform:none}
+.grab{width:40px;height:4px;border-radius:2px;background:#5a4636;margin:8px auto 0;flex:none}
+.x{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(18,13,10,.85);font-size:22px;line-height:1;z-index:3}
+.scroll{overflow-y:auto;overscroll-behavior:contain;flex:1}
+.pv{display:grid}
+.pv img{width:100%;height:min(42vh,100vw);object-fit:cover;object-position:top}
+.pi{padding:16px 16px 8px;display:grid;gap:10px}
+.pi .b{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.pi h3{font-size:34px}
+.fam{color:var(--gold2);font-size:14px}
+.desc{color:var(--mute);margin:0;font-size:15px}
+.lbl{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-top:4px}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:8px}
+.seg button{min-height:48px;border-radius:12px;border:1px solid var(--line);background:none;font-size:15px;font-weight:600;padding:4px 8px;line-height:1.15}
+.seg button[aria-pressed=true]{background:var(--gold);border-color:var(--gold);color:var(--dark)}
+.seg button small{display:block;font-weight:500;font-size:11px;opacity:.75}
+.hint{font-size:13px;color:var(--mute);margin:0}
+.pyr{margin:4px 0 0;display:grid;gap:8px}
+.pyr div{display:grid;grid-template-columns:6.5em minmax(0,1fr);gap:8px;border-top:1px solid var(--line);padding-top:8px;font-size:14px}
+.pyr dt{color:var(--gold)}
+.pyr dd{margin:0}
+.bar{flex:none;border-top:1px solid var(--line);padding:10px 16px calc(12px + var(--sb));background:var(--bg2);display:grid;gap:8px}
+.bar .pr{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.bar .pr b{font:600 26px/1.1 var(--serif)}
+.bar .pr span{font-size:12px;color:var(--mute)}
+.bar .row{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:8px}
+.bar .btn{padding:0 12px;font-size:14px}
+.cartlist{padding:6px 16px}
+.row2{display:flex;gap:8px}.row2>*{flex:1}
+.row3{display:grid;grid-template-columns:50px minmax(0,1fr) minmax(0,1fr);gap:8px}
+.btn.sq{padding:0}.btn.sq svg{width:22px;height:22px}
+.btn.wa{background:#25d366;border-color:#25d366;color:#06200f}
+.center{text-align:center}
+@media(max-width:400px){.brand b{font-size:17px}.brand img{width:34px;height:34px}.hd{gap:8px}}
+.it{display:grid;grid-template-columns:58px minmax(0,1fr) auto;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);align-items:center}
+.it img{width:58px;height:62px;object-fit:cover;object-position:top;border-radius:8px}
+.it b{font:600 19px/1.1 var(--serif);display:block}
+.it small{color:var(--mute);font-size:12px;display:block}
+.qty{display:flex;align-items:center;gap:6px;margin-top:6px}
+.qty button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:none;font-size:18px;line-height:1}
+.qty span{min-width:18px;text-align:center}
+.ip{text-align:right;font-weight:700;font-size:14px;white-space:nowrap}
+.rm{display:block;margin-top:6px;margin-left:auto;background:none;border:0;color:var(--mute);font-size:12px;text-decoration:underline;padding:4px 0}
+.fields{padding:12px 16px;display:grid;gap:8px}
+.fields input,.fields textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:16px}
+.fields textarea{min-height:60px;resize:vertical}
+.ttl{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font:600 22px/1.2 var(--serif)}
+.cartbar{position:fixed;z-index:30;left:10px;right:10px;bottom:calc(10px + var(--sb));display:none}
+.cartbar.on{display:flex}
+.cartbar .btn{width:100%;justify-content:space-between;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.go{position:fixed;inset:0;z-index:70;display:none;place-items:center;background:rgba(0,0,0,.75);padding:20px}
+.go.on{display:grid}
+.go div{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:22px;max-width:380px;display:grid;gap:12px;text-align:center}
+.go h3{font-size:28px}
+.go p{margin:0;color:var(--mute);font-size:15px}
+.go>div{width:100%;max-height:92dvh;overflow:auto}
+.msg{margin:0;text-align:left;white-space:pre-wrap;word-break:break-word;font:15px/1.5 var(--sans);background:var(--bg);border:1px dashed var(--gold);border-radius:12px;padding:12px 14px;max-height:34vh;overflow:auto;user-select:all;-webkit-user-select:all}
+.linkx{background:none;border:0;color:var(--mute);text-decoration:underline;min-height:40px}
+.toast{position:fixed;left:50%;bottom:calc(80px + var(--sb));transform:translate(-50%,20px);background:var(--gold);color:var(--dark);font-weight:700;padding:10px 18px;border-radius:999px;opacity:0;transition:.3s;z-index:80;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media(min-width:600px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+  .cb h3{font-size:23px}
+  .steps,.vers{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .vers{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(min-width:860px){
+  nav{display:flex}
+  .hero .wrap{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center}
+  .hero .fan{order:2}
+  .cathead{grid-template-columns:auto minmax(0,320px);align-items:end;justify-content:space-between}
+  .cathead .chips{grid-column:1/-1;margin:0;padding:0;flex-wrap:wrap}
+  .sheet{left:50%;right:auto;bottom:auto;top:50%;width:min(940px,94vw);max-height:90vh;border-radius:18px;border:1px solid var(--line);transform:translate(-50%,-46%);opacity:0;pointer-events:none;transition:.25s}
+  .sheet.on{transform:translate(-50%,-50%);opacity:1;pointer-events:auto}
+  #product .scroll .pv{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+  #product .pv img{height:100%;aspect-ratio:auto;max-height:70vh}
+  .grab{display:none}
+  .cartbar{display:none!important}
+  #cart{left:auto;right:0;top:0;bottom:0;transform:translateX(105%);width:min(440px,100%);max-height:none;height:100%;border-radius:0}
+  #cart.on{transform:none}
+  footer{padding-bottom:40px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <a class="brand" href="#top"><img src="logo.jpg" alt=""><b>Maison de Parfum</b></a>
+    <nav>
+      <a href="#catalog" data-t="nav_catalog">Каталог</a>
+      <a href="#how" data-t="nav_how">Как заказать</a>
+      <a href="#contacts" data-t="nav_contacts">Контакты</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language"><button id="l-ru" aria-pressed="true">RU</button><button id="l-en" aria-pressed="false">EN</button></div>
+    <button class="iconbtn" id="openCart" aria-label="Корзина">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <span class="badge" id="badge"></span>
+    </button>
+  </div>
+</header>
+
+<section class="band hero" id="top">
+  <div class="wrap">
+    <div class="fan" aria-hidden="true">
+      <img src="angels-share.jpg" alt=""><img src="baccarat-rouge-540.jpg" alt=""><img src="delina.jpg" alt="">
+    </div>
+    <div>
+      <h1 data-t="hero_title">Искусство открывать ароматы</h1>
+      <p data-t="hero_sub">Нишевые и люксовые ароматы на распив: масляные версии и отливанты оригиналов. Выберите аромат и объём — заказ уйдёт нам в Instagram или WhatsApp в одно касание.</p>
+      <a class="btn" href="#catalog" data-t="hero_cta">Смотреть каталог</a>
+      <div class="facts" id="facts"></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="catalog">
+  <div class="wrap">
+    <div class="cathead">
+      <h2 data-t="cat_title">Каталог</h2>
+      <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" data-tp="search_ph" placeholder="Поиск аромата или бренда" autocomplete="off"></label>
+      <div class="chips" id="chips"></div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section class="band how" id="how">
+  <div class="wrap">
+    <h2 data-t="how_title">Как заказать</h2>
+    <div class="steps">
+      <div class="step"><b>I</b><h3 data-t="s1h">Выберите аромат</h3><p data-t="s1p">Нажмите на карточку: там ноты, версия и объём.</p></div>
+      <div class="step"><b>II</b><h3 data-t="s2h">Нажмите «Заказать»</h3><p data-t="s2p">WhatsApp откроется с готовым текстом заказа. В Instagram мы скопируем текст — просто вставьте его в директ.</p></div>
+      <div class="step"><b>III</b><h3 data-t="s3h">Получите аромат</h3><p data-t="s3p">Подтвердим наличие, точную цену и доставку прямо в чате.</p></div>
+    </div>
+    <div class="vers" id="vers"></div>
+  </div>
+</section>
+
+<footer class="band" id="contacts">
+  <div class="wrap">
+    <div class="fb"><img src="logo.jpg" alt="Maison de Parfum"><div><b>Maison de Parfum</b><span class="small">The art of discovering fragrances</span></div></div>
+    <div class="contacts" id="contactList"></div>
+    <p class="small" data-t="legal">Названия ароматов и брендов принадлежат их правообладателям. Масляные версии не являются продукцией указанных брендов.</p>
+  </div>
+</footer>
+
+<div class="cartbar" id="cartbar"><button class="btn" id="cartbarBtn"><span id="cbL"></span><span id="cbR"></span></button></div>
+<div class="scrim" id="scrim"></div>
+
+<div class="sheet" id="product" role="dialog" aria-modal="true" aria-labelledby="pName">
+  <div class="grab"></div>
+  <button class="x" data-close aria-label="Close">×</button>
+  <div class="scroll">
+    <div class="pv">
+      <img id="pImg" alt="">
+      <div class="pi">
+        <div class="b" id="pBrand"></div>
+        <h3 id="pName"></h3>
+        <div class="fam" id="pFam"></div>
+        <p class="desc" id="pDesc"></p>
+        <div class="lbl" data-t="version">Версия</div>
+        <div class="seg" id="pVer"></div>
+        <p class="hint" id="pHint"></p>
+        <div class="lbl" data-t="size">Объём</div>
+        <div class="seg" id="pSize"></div>
+        <div class="lbl" data-t="notes">Ноты аромата</div>
+        <dl class="pyr" id="pPyr"></dl>
+      </div>
+    </div>
+  </div>
+  <div class="bar">
+    <div class="pr"><b id="pPrice"></b><span id="pNote"></span></div>
+    <div class="row3">
+      <button class="btn ghost sq" id="pAdd" aria-label="В корзину"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/><path d="M12 11v5M9.5 13.5h5"/></svg></button>
+      <button class="btn" id="pBuy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg><span>Instagram</span></button>
+      <button class="btn wa" id="pWa"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3a.5.5 0 0 0 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.7-1.2 2.2 2.2 0 0 0 .2-1.2c-.1-.1-.3-.2-.5-.3Z"/></svg><span>WhatsApp</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="sheet" id="cart" role="dialog" aria-modal="true" aria-labelledby="cTitle">
+  <div class="grab"></div>
+  <button class="x" data-close aria-label="Close">×</button>
+  <div class="scroll">
+    <div class="pi"><h3 id="cTitle" data-t="cart_title">Корзина</h3></div>
+    <div class="cartlist" id="items"></div>
+    <div class="fields" id="cfields">
+      <input id="cName" autocomplete="name" data-tp="name_ph" placeholder="Ваше имя">
+      <textarea id="cNote" data-tp="note_ph" placeholder="Город, адрес или комментарий"></textarea>
+    </div>
+  </div>
+  <div class="bar" id="cbar">
+    <div class="ttl"><span data-t="total">Итого</span><span id="total"></span></div>
+    <span class="small" id="totNote"></span>
+    <span class="small" data-t="send_via">Отправить заказ через:</span>
+    <div class="row2">
+      <button class="btn" id="cBuy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg><span>Instagram</span></button>
+      <a class="btn wa" id="waBtn" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3a.5.5 0 0 0 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.7-1.2 2.2 2.2 0 0 0 .2-1.2c-.1-.1-.3-.2-.5-.3Z"/></svg><span>WhatsApp</span></a>
+    </div>
+    <button class="linkx" id="copyBtn" data-t="copy">Скопировать текст заказа</button>
+  </div>
+</div>
+
+<div class="go" id="go"><div>
+  <h3 data-t="go_title">Ваше сообщение готово</h3>
+  <p data-t="go_text">Мы скопировали его за вас. Откройте наш директ, нажмите на поле сообщения и выберите «Вставить».</p>
+  <pre class="msg" id="goMsg"></pre>
+  <button class="btn ghost" id="goCopy"></button>
+  <a class="btn" id="goLink" target="_top" rel="noopener"></a>
+  <button class="linkx" id="goClose" data-t="close">Закрыть</button>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+{
+/* ================= НАСТРОЙКИ МАГАЗИНА / STORE SETTINGS =================
+   instagram — ник без @ (сюда приходят заказы)
+   whatsapp  — номер без «+» и пробелов, например "77011234567" ("" = кнопки нет)
+   Цены: число = точная цена; [от, до] = диапазон; null = «цену уточним».
+   Чтобы задать другие цены одному аромату — добавьте ему prices:{oil:{...},original:{...}} в списке ниже. */
+const CONFIG = {
+  instagram: "maison_de_parfume_store",
+  whatsapp: "77011060568",
+  currency: "₸",
+  versions: {
+    oil:      { sizes:[10,15,20], prices:{10:13000, 15:15000, 20:null} },
+    original: { sizes:[5,10,15],  prices:{5:[15000,20000], 10:null, 15:[30000,35000]} }
+  }
+};
+/* ====================================================================== */
+
+const T={
+ru:{nav_catalog:"Каталог",nav_how:"Как заказать",nav_contacts:"Контакты",hero_title:"Искусство открывать ароматы",hero_sub:"Нишевые и люксовые ароматы на распив: масляные версии и отливанты оригиналов. Выберите аромат и объём — заказ уйдёт нам в Instagram или WhatsApp в одно касание.",hero_cta:"Смотреть каталог",cat_title:"Каталог",search_ph:"Поиск аромата или бренда",f_all:"Все",f_w:"Женские",f_m:"Мужские",f_u:"Унисекс",g_w:"Женский",g_m:"Мужской",g_u:"Унисекс",ml:"мл",from:"от",to:"до",new:"Новинка",version:"Версия",size:"Объём",notes:"Ноты аромата",top:"Верхние",heart:"Сердце",base:"База",oil:"Масляный",original:"Оригинал",oil_s:"идентичный оригиналу",original_s:"отливант",oil_h:"Масляная версия, повторяющая звучание оригинала. Стойкая и экономичная.",original_h:"Отливант — оригинальный парфюм, перелитый из флакона в атомайзер.",fixed:"Цена за выбранный объём",range:"Точную цену уточним в чате",ask:"Цену уточним в чате",add:"В корзину",added:"Добавлено в корзину",buy_ig:"Заказать в Instagram",how_title:"Как заказать",s1h:"Выберите аромат",s1p:"Нажмите на карточку: там ноты, версия и объём.",s2h:"Нажмите «Заказать»",s2p:"WhatsApp откроется с готовым текстом заказа. В Instagram мы скопируем текст — просто вставьте его в директ.",s3h:"Получите аромат",s3p:"Подтвердим наличие, точную цену и доставку прямо в чате.",cart_title:"Корзина",empty:"Корзина пока пуста",total:"Итого",partial:"Часть цен уточним в чате",name_ph:"Ваше имя",note_ph:"Город, адрес или комментарий",order_ig:"Отправить заказ в Instagram",copy:"Скопировать текст заказа",order_via:"Заказ — через Instagram или WhatsApp. Значок слева добавляет в корзину",send_via:"Отправить заказ через:",copied:"Заказ скопирован",remove:"Удалить",cart:"Корзина",checkout:"Оформить",pcs:"шт.",go_title:"Ваше сообщение готово",go_text:"Мы скопировали его за вас. Откройте наш директ, нажмите на поле сообщения и выберите «Вставить».",go_copy:"1 · Скопировать сообщение",go_copied:"1 · Скопировано ✓",go_btn:"2 · Открыть директ Instagram",oil_l:"масляный",original_l:"оригинал",want:"Здравствуйте! Хочу купить",want_list:"Здравствуйте! Хочу купить:",site_price:"Цена на сайте",ask_price:"Подскажите, пожалуйста, цену",close:"Закрыть",nothing:"Ничего не нашлось",legal:"Названия ароматов и брендов принадлежат их правообладателям. Масляные версии не являются продукцией указанных брендов.",hi_one:"Здравствуйте! Хочу купить:",hi_many:"Здравствуйте! Хочу заказать:",o_total:"Итого",o_name:"Имя",o_note:"Комментарий",o_ask:"цену уточнить",from_site:"(заказ с сайта)"},
+en:{nav_catalog:"Catalogue",nav_how:"How to order",nav_contacts:"Contacts",hero_title:"The art of discovering fragrances",hero_sub:"Niche and luxury fragrances by the decant: oil-based versions and decants of originals. Pick a scent and size — your order goes to our Instagram or WhatsApp in one tap.",hero_cta:"Browse the catalogue",cat_title:"Catalogue",search_ph:"Search a scent or brand",f_all:"All",f_w:"Women",f_m:"Men",f_u:"Unisex",g_w:"Women",g_m:"Men",g_u:"Unisex",ml:"ml",from:"from",to:"to",new:"New",version:"Version",size:"Size",notes:"Fragrance notes",top:"Top",heart:"Heart",base:"Base",oil:"Oil-based",original:"Original",oil_s:"true to the original",original_s:"decant",oil_h:"An oil-based version that reproduces the original's scent. Long-lasting and great value.",original_h:"A decant — original perfume transferred from the bottle into an atomiser.",fixed:"Price for the selected size",range:"We'll confirm the exact price in chat",ask:"We'll confirm the price in chat",add:"Add to cart",added:"Added to cart",buy_ig:"Order on Instagram",how_title:"How to order",s1h:"Pick a scent",s1p:"Tap a card to see the notes, version and size.",s2h:"Tap “Order”",s2p:"WhatsApp opens with your order already typed. For Instagram we copy the text — just paste it into the DM.",s3h:"Get your scent",s3p:"We confirm availability, exact price and delivery right in the chat.",cart_title:"Cart",empty:"Your cart is empty",total:"Total",partial:"Some prices are confirmed in chat",name_ph:"Your name",note_ph:"City, address or comment",order_ig:"Send order on Instagram",copy:"Copy order text",order_via:"Order via Instagram or WhatsApp. The icon on the left adds to cart",send_via:"Send your order via:",copied:"Order copied",remove:"Remove",cart:"Cart",checkout:"Checkout",pcs:"pcs",go_title:"Your message is ready",go_text:"We've copied it for you. Open our DMs, tap the message field and choose “Paste”.",go_copy:"1 · Copy message",go_copied:"1 · Copied ✓",go_btn:"2 · Open Instagram DMs",oil_l:"oil-based",original_l:"original",want:"Hello! I'd like to buy",want_list:"Hello! I'd like to buy:",site_price:"Price on the website",ask_price:"Could you tell me the price, please?",close:"Close",nothing:"Nothing found",legal:"Fragrance and brand names belong to their owners. Oil-based versions are not products of the brands named.",hi_one:"Hello! I'd like to buy:",hi_many:"Hello! I'd like to order:",o_total:"Total",o_name:"Name",o_note:"Comment",o_ask:"price to confirm",from_site:"(order from the website)"}
+};
+
+/* n: [верх, сердце, база] — RU и EN */
+const P=[
+{id:"absolu-aventus",brand:"Creed",name:"Absolu Aventus",g:"m",
+ fam:{ru:"Фруктовый · цитрусовый · древесный",en:"Fruity · citrus · woody"},
+ d:{ru:"Более насыщенная и фруктовая версия легендарного Aventus. Бергамот, лимон, чёрная смородина, грейпфрут и имбирь, дымная берёза и роза в сердце, амбра и дубовый мох в базе.",en:"A richer, fruitier take on the legendary Aventus. Bergamot, lemon, blackcurrant, grapefruit and ginger, a smoky birch-and-rose heart, ambergris and oakmoss below."},
+ n:{ru:[["Бергамот","Лимон","Чёрная смородина","Грейпфрут","Имбирь"],["Берёза","Роза"],["Амбра","Дубовый мох"]],en:[["Bergamot","Lemon","Blackcurrant","Grapefruit","Ginger"],["Birch","Rose"],["Ambergris","Oakmoss"]]}},
+{id:"althair",brand:"Parfums de Marly",name:"Althaïr",g:"m",
+ fam:{ru:"Амбровый · ванильный · древесный",en:"Amber · vanilla · woody"},
+ d:{ru:"Современная «благородная ваниль»: флёрдоранж, бергамот и корица, бурбонская ваниль с элеми, а в базе — пралине, мускус, амброксан и гваяк. Тёплый, но неожиданно свежий.",en:"A modern 'noble vanilla': orange blossom, bergamot and cinnamon, Bourbon vanilla with elemi, then praline, musk, ambrox and guaiac wood. Warm yet surprisingly fresh."},
+ n:{ru:[["Флёрдоранж","Бергамот","Корица","Кардамон"],["Бурбонская ваниль","Элеми"],["Пралине","Мускус","Амброксан","Гваяк"]],en:[["Orange blossom","Bergamot","Cinnamon","Cardamom"],["Bourbon vanilla","Elemi"],["Praline","Musk","Ambrox","Guaiac wood"]]}},
+{id:"oud-for-greatness",brand:"Initio",name:"Oud for Greatness",g:"u",
+ fam:{ru:"Уд · пряный · древесный",en:"Oud · spicy · woody"},
+ d:{ru:"Флагманский уд Initio: лаванда, шафран и мускатный орех, натуральный уд в сердце, пачули и мускус в базе. Мощный, глубокий и очень стойкий.",en:"Initio's flagship oud: lavender, saffron and nutmeg, natural oud at the heart, patchouli and musk at the base. Powerful, deep and very long-lasting."},
+ n:{ru:[["Лаванда","Шафран","Мускатный орех"],["Уд"],["Пачули","Мускус"]],en:[["Lavender","Saffron","Nutmeg"],["Oud"],["Patchouli","Musk"]]}},
+{id:"devils-intrigue",brand:"HFC",name:"Devil’s Intrigue",g:"u",
+ fam:{ru:"Цветочный · древесный · кремовый",en:"Floral · woody · creamy"},
+ d:{ru:"Кремовый пудровый аромат Haute Fragrance Company: османтус и белый чай, флёрдоранж и сандал, а в базе — ваниль и кашмеран. Мягкий и интимный, хорош вечером.",en:"A creamy, powdery scent from Haute Fragrance Company: osmanthus and white tea, orange blossom and sandalwood, then vanilla and cashmeran. Soft and intimate — lovely at night."},
+ n:{ru:[["Османтус","Белый чай"],["Флёрдоранж","Сандал"],["Ваниль","Кашмеран","Древесные ноты"]],en:[["Osmanthus","White tea"],["Orange blossom","Sandalwood"],["Vanilla","Cashmeran","Woody notes"]]}},
+{id:"angels-share",brand:"Kilian Paris",name:"Angels’ Share",g:"u",
+ fam:{ru:"Гурманский · пряный · древесный",en:"Gourmand · spicy · woody"},
+ d:{ru:"Личный аромат Килиана Хеннесси, наследника коньячной династии. Эссенция коньяка, корица и дуб, бобы тонка, а в шлейфе — пралине, ваниль и сандал.",en:"Kilian Hennessy's most personal scent, a nod to his cognac-dynasty roots. Cognac essence, cinnamon and oak, tonka, then praline, vanilla and sandalwood."},
+ n:{ru:[["Коньяк"],["Корица","Дуб","Бобы тонка"],["Пралине","Ваниль","Сандал"]],en:[["Cognac"],["Cinnamon","Oak","Tonka bean"],["Praline","Vanilla","Sandalwood"]]}},
+{id:"blonde-amber",brand:"Clive Christian",name:"XXI Art Deco Blonde Amber",g:"u",isNew:true,
+ fam:{ru:"Амбровый · табачный · пряный",en:"Amber · tobacco · spicy"},
+ d:{ru:"Аромат коллекции Noble в духе ар-деко. Горький апельсин, ром, имбирь и розовый перец, светлый табак, ирис и сухофрукты, а в базе — тонка, ваниль, лабданум и ладан.",en:"From the Noble Collection, inspired by Art Deco. Bitter orange, rum, ginger and pink pepper, blonde tobacco, orris and dried fruit, over tonka, vanilla, labdanum and incense."},
+ n:{ru:[["Горький апельсин","Ром","Имбирь","Розовый перец","Кардамон"],["Светлый табак","Ирис","Жасмин","Сухофрукты","Шафран"],["Бобы тонка","Ваниль","Лабданум","Мирра","Ладан"]],en:[["Bitter orange","Rum","Ginger","Pink pepper","Cardamom"],["Blonde tobacco","Orris","Jasmine","Dried fruit","Saffron"],["Tonka bean","Vanilla","Labdanum","Myrrh","Incense"]]}},
+{id:"hedonistic",brand:"Clive Christian",name:"Hedonistic",g:"u",isNew:true,
+ fam:{ru:"Амбровый · табачный · фруктовый",en:"Amber · tobacco · fruity"},
+ d:{ru:"Jump Up and Kiss Me Hedonistic из коллекции Addictive Arts. Чёрная вишня, мате и цитрусы, затем табак, жасмин, ирис и папирус, а в базе — амбра, кожа, ваниль и тонка.",en:"Jump Up and Kiss Me Hedonistic from Addictive Arts. Black cherry, maté and citrus, then tobacco, jasmine, orris and papyrus, over amber, leather, vanilla and tonka."},
+ n:{ru:[["Чёрная вишня","Мате","Бергамот","Грейпфрут","Нероли"],["Табак","Жасмин","Ирис","Папирус"],["Амбра","Кожа","Лабданум","Ваниль","Бобы тонка"]],en:[["Black cherry","Maté","Bergamot","Grapefruit","Neroli"],["Tobacco","Jasmine","Orris","Papyrus"],["Amber","Leather","Labdanum","Vanilla","Tonka bean"]]}},
+{id:"ombre-nomade",brand:"Louis Vuitton",name:"Ombre Nomade",g:"u",isNew:true,
+ fam:{ru:"Уд · восточный · древесный",en:"Oud · oriental · woody"},
+ d:{ru:"Уд от Louis Vuitton для настоящих ценителей: дымный уд с бензоином, ладан и неожиданно сочная малина. Глубокий, восточный и очень стойкий.",en:"Louis Vuitton's oud for true connoisseurs: smoky oud with benzoin, incense and a surprisingly juicy raspberry. Deep, oriental and very long-lasting."},
+ n:{ru:[["Малина"],["Уд","Бензоин"],["Ладан"]],en:[["Raspberry"],["Oud","Benzoin"],["Incense"]]}},
+{id:"limmensite",brand:"Louis Vuitton",name:"L’Immensité",g:"m",isNew:true,
+ fam:{ru:"Цитрусовый · пряный · амбровый",en:"Citrus · spicy · amber"},
+ d:{ru:"Самый известный мужской аромат Louis Vuitton. Хрустящий имбирь, горький грейпфрут и бергамот, морская свежесть, а в базе — тёплая амбра и лабданум. Свежий и мощный.",en:"Louis Vuitton's best-known men's scent. Crackling ginger, bitter grapefruit and bergamot, a sea-fresh accord, then warm amber and labdanum. Fresh and powerful."},
+ n:{ru:[["Имбирь","Грейпфрут","Бергамот"],["Морской аккорд","Ветивер"],["Амброксан","Амбра","Лабданум"]],en:[["Ginger","Grapefruit","Bergamot"],["Sea accord","Vetiver"],["Ambroxan","Ambergris","Labdanum"]]}},
+{id:"elysium",brand:"Roja Parfums",name:"Elysium",g:"m",
+ fam:{ru:"Цитрусовый · древесный · свежий",en:"Citrus · woody · fresh"},
+ d:{ru:"Elysium Pour Homme от Roja Dove: грейпфрут, лимон, лайм и бергамот с травами, яблоко, смородина и белые цветы, а в базе — ветивер, кедр, бензоин, ваниль и амбра. Свежесть класса люкс.",en:"Elysium Pour Homme by Roja Dove: grapefruit, lemon, lime and bergamot with herbs, apple, blackcurrant and white florals, then vetiver, cedar, benzoin, vanilla and ambergris. Luxury freshness."},
+ n:{ru:[["Грейпфрут","Лимон","Лайм","Бергамот","Лаванда","Тимьян"],["Яблоко","Чёрная смородина","Ландыш","Роза","Жасмин"],["Ветивер","Кедр","Бензоин","Ваниль","Амбра"]],en:[["Grapefruit","Lemon","Lime","Bergamot","Lavender","Thyme"],["Apple","Blackcurrant","Lily of the valley","Rose","Jasmine"],["Vetiver","Cedar","Benzoin","Vanilla","Ambergris"]]}},
+{id:"delina",brand:"Parfums de Marly",name:"Delina",g:"w",
+ fam:{ru:"Цветочный · фруктовый",en:"Floral · fruity"},
+ d:{ru:"Культовый цветочный аромат: сочное личи и ревень раскрываются в пышную турецкую розу с пионом, а кашмеран, мускус и ветивер делают шлейф мягким. Нежный и романтичный.",en:"A cult floral: juicy lychee and rhubarb open onto a lush Turkish rose with peony, while cashmeran, musk and vetiver keep the trail soft. Tender and romantic."},
+ n:{ru:[["Личи","Ревень","Бергамот","Мускатный орех"],["Турецкая роза","Пион","Ландыш","Ваниль"],["Кашмеран","Мускус","Ветивер","Ладан","Кедр"]],en:[["Lychee","Rhubarb","Bergamot","Nutmeg"],["Turkish rose","Peony","Lily of the valley","Vanilla"],["Cashmeran","Musk","Vetiver","Incense","Cedar"]]}},
+{id:"symphony",brand:"Louis Vuitton",name:"Symphony",g:"u",isNew:true,
+ fam:{ru:"Цитрусовый · фруктовый",en:"Citrus · fruity"},
+ d:{ru:"Экстрей коллекции Les Extraits во флаконе Фрэнка Гери. Сочный грейпфрут, бергамот и апельсин с искрящимся имбирём на мягкой мускусной базе.",en:"An extrait from Les Extraits in a Frank Gehry bottle. Juicy grapefruit, bergamot and orange with sparkling ginger over soft musk."},
+ n:{ru:[["Грейпфрут","Бергамот","Апельсин"],["Имбирь"],["Мускус"]],en:[["Grapefruit","Bergamot","Orange"],["Ginger"],["Musk"]]}},
+{id:"baccarat-rouge-540",brand:"Maison Francis Kurkdjian",name:"Baccarat Rouge 540",g:"u",
+ fam:{ru:"Амбровый · древесный · цветочный",en:"Amber · woody · floral"},
+ d:{ru:"Культовый аромат Франсиса Куркджяна, созданный к 250-летию Baccarat. Воздушный жасмин и шафран, свежесрубленный кедр и минеральная амбра — узнаваемый сияющий шлейф.",en:"Francis Kurkdjian's cult scent, created for Baccarat's 250th anniversary. Airy jasmine and saffron, fresh-cut cedar and mineral ambergris — an instantly recognisable glow."},
+ n:{ru:[["Жасмин","Шафран"],["Кедр"],["Амбра","Древесный аккорд"]],en:[["Jasmine","Saffron"],["Cedarwood"],["Ambergris","Woody accord"]]}},
+{id:"tobacco-vanille",brand:"Tom Ford",name:"Tobacco Vanille",g:"u",
+ fam:{ru:"Пряный · табачный · гурманский",en:"Spicy · tobacco · gourmand"},
+ d:{ru:"Икона Tom Ford, вдохновлённая лондонскими джентльменскими клубами. Табачный лист и пряности, затем тонка, какао, ваниль и табачный цветок, а в базе — сухофрукты и дерево.",en:"Tom Ford's icon, inspired by London gentlemen's clubs. Tobacco leaf and spices, then tonka, cocoa, vanilla and tobacco flower, over dried fruit and woods."},
+ n:{ru:[["Табачный лист","Пряности","Имбирь"],["Бобы тонка","Табачный цветок","Какао","Ваниль"],["Сухофрукты","Древесные ноты"]],en:[["Tobacco leaf","Spices","Ginger"],["Tonka bean","Tobacco flower","Cocoa","Vanilla"],["Dried fruit","Woody notes"]]}},
+{id:"lost-cherry",brand:"Tom Ford",name:"Lost Cherry",g:"u",
+ fam:{ru:"Фруктовый · гурманский",en:"Fruity · gourmand"},
+ d:{ru:"Сочная чёрная вишня с вишнёвым ликёром и горьким миндалём, турецкая роза и жасмин в сердце, а в базе — тонка, перуанский бальзам, сандал и кедр. Сладкий и очень заметный.",en:"Juicy black cherry with cherry liqueur and bitter almond, Turkish rose and jasmine at the heart, then tonka, Peru balsam, sandalwood and cedar. Sweet and attention-grabbing."},
+ n:{ru:[["Чёрная вишня","Вишнёвый ликёр","Горький миндаль"],["Турецкая роза","Жасмин самбак","Слива"],["Бобы тонка","Перуанский бальзам","Сандал","Кедр"]],en:[["Black cherry","Cherry liqueur","Bitter almond"],["Turkish rose","Jasmine sambac","Plum"],["Tonka bean","Peru balsam","Sandalwood","Cedar"]]}},
+{id:"erba-pura",brand:"Xerjoff",name:"Erba Pura",g:"u",
+ fam:{ru:"Фруктовый · цитрусовый · мускусный",en:"Fruity · citrus · musky"},
+ d:{ru:"Средиземноморская свежесть Xerjoff: сицилийский апельсин, лимон и калабрийский бергамот, сочные фрукты в сердце и база из белого мускуса, амбры и мадагаскарской ванили.",en:"Xerjoff's Mediterranean sunshine: Sicilian orange, lemon and Calabrian bergamot, a juicy fruit heart, and a base of white musk, amber and Madagascar vanilla."},
+ n:{ru:[["Апельсин","Лимон","Бергамот"],["Средиземноморские фрукты"],["Белый мускус","Амбра","Ваниль"]],en:[["Orange","Lemon","Bergamot"],["Mediterranean fruits"],["White musk","Amber","Vanilla"]]}},
+{id:"naxos",brand:"Xerjoff",name:"Naxos",g:"u",
+ fam:{ru:"Медовый · табачный · пряный",en:"Honey · tobacco · spicy"},
+ d:{ru:"Дань Сицилии из коллекции XJ 1861: бергамот, лимон и лаванда, затем мёд, корица и жасмин, а в базе — табачный лист, тонка и ваниль. Тёплый медово-табачный аромат.",en:"A tribute to Sicily from the XJ 1861 line: bergamot, lemon and lavender, then honey, cinnamon and jasmine, over tobacco leaf, tonka and vanilla. Warm honey-tobacco."},
+ n:{ru:[["Бергамот","Лимон","Лаванда"],["Мёд","Корица","Жасмин самбак","Кашмеран"],["Табачный лист","Бобы тонка","Ваниль"]],en:[["Bergamot","Lemon","Lavender"],["Honey","Cinnamon","Jasmine sambac","Cashmeran"],["Tobacco leaf","Tonka bean","Vanilla"]]}},
+{id:"layton",brand:"Parfums de Marly",name:"Layton",g:"m",
+ fam:{ru:"Фужерный · пряный · ванильный",en:"Fougère · spicy · vanilla"},
+ d:{ru:"Один из самых узнаваемых ароматов Parfums de Marly: сочное яблоко, бергамот и лаванда, герань и фиалка, а в базе — ваниль, гваяк, пачули и пряности. Элегантный, для осени и зимы.",en:"One of Parfums de Marly's best-known scents: crisp apple, bergamot and lavender, geranium and violet, then vanilla, guaiac, patchouli and spice. Elegant, for autumn and winter."},
+ n:{ru:[["Яблоко","Бергамот","Лаванда","Кардамон"],["Герань","Фиалка","Жасмин"],["Ваниль","Гваяк","Пачули","Перец"]],en:[["Apple","Bergamot","Lavender","Cardamom"],["Geranium","Violet","Jasmine"],["Vanilla","Guaiac wood","Patchouli","Pepper"]]}},
+{id:"aventus",brand:"Creed",name:"Aventus",g:"m",
+ fam:{ru:"Фруктовый шипр · дымный",en:"Fruity chypre · smoky"},
+ d:{ru:"Легенда Creed: ананас, бергамот, чёрная смородина и яблоко, затем дымная берёза, пачули и жасмин, а в базе — дубовый мох, мускус, амбра и ваниль. Аромат успеха.",en:"Creed's legend: pineapple, bergamot, blackcurrant and apple, then smoky birch, patchouli and jasmine, over oakmoss, musk, ambergris and vanilla. The scent of success."},
+ n:{ru:[["Ананас","Бергамот","Чёрная смородина","Яблоко"],["Берёза","Пачули","Жасмин","Можжевельник"],["Дубовый мох","Мускус","Амбра","Ваниль"]],en:[["Pineapple","Bergamot","Blackcurrant","Apple"],["Birch","Patchouli","Jasmine","Juniper"],["Oakmoss","Musk","Ambergris","Vanilla"]]}},
+{id:"love-dont-be-shy",brand:"Kilian Paris",name:"Love, Don’t Be Shy",g:"w",
+ fam:{ru:"Цветочный · гурманский",en:"Floral · gourmand"},
+ d:{ru:"Первый аромат Kilian (парфюмер Калис Беккер): нероли и флёрдоранж, роза и жимолость, а в базе — знаменитый маршмеллоу с ванилью, мускусом и карамелью. Нежный и сладкий.",en:"Kilian's very first scent, by Calice Becker: neroli and orange blossom, rose and honeysuckle, over the famous marshmallow with vanilla, musk and caramel. Soft and sweet."},
+ n:{ru:[["Нероли","Бергамот","Розовый перец"],["Флёрдоранж","Роза","Жимолость","Жасмин"],["Маршмеллоу","Ваниль","Мускус","Карамель"]],en:[["Neroli","Bergamot","Pink pepper"],["Orange blossom","Rose","Honeysuckle","Jasmine"],["Marshmallow","Vanilla","Musk","Caramel"]]}},
+{id:"side-effect",brand:"Initio",name:"Side Effect",g:"u",
+ fam:{ru:"Пряный · табачный · сладкий",en:"Spicy · tobacco · sweet"},
+ d:{ru:"Пьянящий аромат Initio: ром и корица, табак и ваниль, шафран и сандал с гедионом. Тёплый, сладкий и смелый — для вечера и холодов.",en:"Initio's heady blend: rum and cinnamon, tobacco and vanilla, saffron and sandalwood with hedione. Warm, sweet and daring — for evenings and cold weather."},
+ n:{ru:[["Гедион","Шафран"],["Ром","Корица"],["Табак","Ваниль","Сандал"]],en:[["Hedione","Saffron"],["Rum","Cinnamon"],["Tobacco","Vanilla","Sandalwood"]]}},
+{id:"interlude-man",brand:"Amouage",name:"Interlude Man",g:"m",
+ fam:{ru:"Дымный · пряный · древесный",en:"Smoky · spicy · woody"},
+ d:{ru:"Дымный шедевр Amouage: бергамот, орегано и душистый перец, ладан, амбра и опопонакс, а в базе — кожа, дым уда, пачули и сандал. Мощный, глубокий, очень стойкий.",en:"Amouage's smoky masterpiece: bergamot, oregano and pimento, frankincense, amber and opoponax, then leather, agarwood smoke, patchouli and sandalwood. Powerful and very long-lasting."},
+ n:{ru:[["Бергамот","Орегано","Душистый перец"],["Ладан","Амбра","Ладанник","Опопонакс"],["Кожа","Дым уда","Пачули","Сандал"]],en:[["Bergamot","Oregano","Pimento"],["Frankincense","Amber","Cistus","Opoponax"],["Leather","Agarwood smoke","Patchouli","Sandalwood"]]}},
+{id:"sauvage-elixir",brand:"Dior",name:"Sauvage Elixir",g:"m",
+ fam:{ru:"Пряный · свежий · древесный",en:"Spicy · fresh · woody"},
+ d:{ru:"Самая концентрированная версия Dior Sauvage: грейпфрут с корицей, мускатным орехом и кардамоном, лаванда, а в базе — лакрица, амбра, сандал, ветивер и пачули.",en:"The most concentrated Dior Sauvage: grapefruit with cinnamon, nutmeg and cardamom, lavender, then liquorice, amber, sandalwood, vetiver and patchouli."},
+ n:{ru:[["Грейпфрут","Корица","Мускатный орех","Кардамон"],["Лаванда"],["Лакрица","Амбра","Сандал","Ветивер","Пачули"]],en:[["Grapefruit","Cinnamon","Nutmeg","Cardamom"],["Lavender"],["Liquorice","Amber","Sandalwood","Vetiver","Patchouli"]]}},
+{id:"hacivat",brand:"Nishane",name:"Hacivat",g:"u",
+ fam:{ru:"Фруктовый шипр · свежий",en:"Fruity chypre · fresh"},
+ d:{ru:"Хит стамбульского дома Nishane: ананас, бергамот и грейпфрут, затем жасмин, пачули и кедр, а в базе — дубовый мох и древесные ноты. Свежий и очень стойкий.",en:"The hit from Istanbul's Nishane: pineapple, bergamot and grapefruit, then jasmine, patchouli and cedar, over oakmoss and woods. Fresh and very long-lasting."},
+ n:{ru:[["Ананас","Бергамот","Грейпфрут"],["Жасмин","Пачули","Кедр"],["Дубовый мох","Древесные ноты"]],en:[["Pineapple","Bergamot","Grapefruit"],["Jasmine","Patchouli","Cedar"],["Oakmoss","Woody notes"]]}},
+{id:"replica-jazz-club",brand:"Maison Margiela",name:"Replica Jazz Club",g:"u",
+ fam:{ru:"Табачный · ромовый · тёплый",en:"Tobacco · rum · warm"},
+ d:{ru:"Атмосфера бруклинского джаз-клуба: розовый перец, лимон и нероли, ром и мускатный шалфей, а в базе — табак, ваниль и стиракс. Тёплый, «коктейльный» и уютный.",en:"A Brooklyn jazz club after dark: pink pepper, lemon and neroli, rum and clary sage, over tobacco, vanilla and styrax. Warm, boozy and cosy."},
+ n:{ru:[["Розовый перец","Лимон","Нероли"],["Ром","Мускатный шалфей","Ветивер"],["Табачный лист","Ваниль","Стиракс"]],en:[["Pink pepper","Lemon","Neroli"],["Rum","Clary sage","Vetiver"],["Tobacco leaf","Vanilla","Styrax"]]}},
+{id:"kirke",brand:"Tiziana Terenzi",name:"Kirke",g:"u",
+ fam:{ru:"Фруктовый · сладкий · мускусный",en:"Fruity · sweet · musky"},
+ d:{ru:"Фруктовый экстрей Tiziana Terenzi: маракуйя, персик, малина, груша и чёрная смородина, ландыш в сердце, а в базе — мускус, сандал, ваниль, пачули и гелиотроп. Сочный и летний.",en:"Tiziana Terenzi's fruity extrait: passion fruit, peach, raspberry, pear and blackcurrant, lily of the valley at the heart, then musk, sandalwood, vanilla, patchouli and heliotrope."},
+ n:{ru:[["Маракуйя","Персик","Малина","Груша","Чёрная смородина"],["Ландыш"],["Мускус","Сандал","Ваниль","Пачули","Гелиотроп"]],en:[["Passion fruit","Peach","Raspberry","Pear","Blackcurrant"],["Lily of the valley"],["Musk","Sandalwood","Vanilla","Patchouli","Heliotrope"]]}},
+/* Скрыты (show:false) — уберите show:false, чтобы вернуть на сайт */
+{id:"attrape-reves",show:false,brand:"Louis Vuitton",name:"Attrape-Rêves",g:"w",fam:{ru:"Фруктовый шипр · цветочный",en:"Fruity chypre · floral"},d:{ru:"Личи и имбирь, пион и турецкая роза на фоне какао, а в основе — пачули.",en:"Lychee and ginger, peony and Turkish rose over cocoa, grounded by patchouli."},n:{ru:[["Личи","Имбирь","Бергамот"],["Пион","Турецкая роза","Какао"],["Пачули"]],en:[["Lychee","Ginger","Bergamot"],["Peony","Turkish rose","Cocoa"],["Patchouli"]]}},
+{id:"oud-maracuja",show:false,brand:"Maison Crivelli",name:"Oud Maracujá",g:"u",fam:{ru:"Экзотический · древесный · фруктовый",en:"Exotic · woody · fruity"},d:{ru:"Яркая маракуйя, шафран и роза против густого уда, на базе из кожи и ванили.",en:"Bright passion fruit, saffron and rose against deep oud, on leather and vanilla."},n:{ru:[["Маракуйя","Шафран","Турецкая роза"],["Уд","Пачули","Бензоин"],["Кожа","Лабданум","Ваниль"]],en:[["Passion fruit","Saffron","Turkish rose"],["Oud","Patchouli","Benzoin"],["Leather","Labdanum","Vanilla"]]}},
+{id:"wild-rush",show:false,brand:"Initio",name:"Wild Rush",g:"u",fam:{ru:"Ароматический фужер",en:"Aromatic fougère"},d:{ru:"Бергамот, лаванда и красные ягоды, карамель с ванилью на сандале и пачули.",en:"Bergamot, lavender and red berries, caramel and vanilla over sandalwood and patchouli."},n:{ru:[["Бергамот","Красные ягоды"],["Лаванда","Карамель","Ваниль"],["Сандал","Пачули"]],en:[["Bergamot","Red berries"],["Lavender","Caramel","Vanilla"],["Sandalwood","Patchouli"]]}},
+{id:"cant-get-enough",show:false,brand:"Initio",name:"Can’t Get Enough",g:"u",fam:{ru:"Цветочный · гурманский",en:"Floral · gourmand"},d:{ru:"Розовый перец и гедион, бархатная роза и сливочная карамель с ванилью.",en:"Pink pepper and hedione, velvety rose and creamy caramel-vanilla."},n:{ru:[["Розовый перец"],["Роза","Гедион"],["Карамель","Ваниль"]],en:[["Pink pepper"],["Rose","Hedione"],["Caramel","Vanilla"]]}},
+{id:"out-of-the-blue",show:false,brand:"Clive Christian",name:"Out of the Blue",g:"u",fam:{ru:"Гурманский · цветочный",en:"Gourmand · floral"},d:{ru:"Кофе, анис и розовый перец, жасмин и флёрдоранж, какао, ванильная карамель и дым.",en:"Coffee, aniseed and pink pepper, jasmine and orange blossom, cocoa, vanilla-caramel and smoke."},n:{ru:[["Кофе","Анис","Розовый перец"],["Жасмин","Флёрдоранж"],["Какао","Ванильная карамель","Дым"]],en:[["Coffee","Aniseed","Pink pepper"],["Jasmine","Orange blossom"],["Cocoa","Vanilla caramel","Smoke"]]}}
+];
+
+const $=s=>document.querySelector(s);
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const live=P.filter(p=>p.show!==false);
+let lang=store.get("mdp_lang","ru");
+let cart=store.get("mdp_cart2",[]).filter(c=>live.some(p=>p.id===c.id)&&CONFIG.versions[c.v]);
+let filter="all",query="",cur=null,sel={v:"oil",s:10};
+const t=k=>T[lang][k]??k;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=n=>n.toLocaleString("ru-RU").replace(/\s/g," ")+" "+CONFIG.currency;
+const verOf=(p,v)=>({...CONFIG.versions[v],prices:{...CONFIG.versions[v].prices,...(p.prices&&p.prices[v]||{})}});
+const priceOf=(p,v,s)=>{const x=verOf(p,v).prices[s];return x===undefined?null:x};
+const lo=x=>Array.isArray(x)?x[0]:x, hi=x=>Array.isArray(x)?x[1]:x;
+const priceText=x=>x==null?"—":Array.isArray(x)?`${t("from")} ${fmt(x[0])} ${t("to")} ${fmt(x[1])}`:fmt(x);
+const minPrice=p=>{let m=null;for(const v in CONFIG.versions)for(const s of verOf(p,v).sizes){const x=priceOf(p,v,s);if(x!=null&&(m==null||lo(x)<m))m=lo(x)}return m};
+const vname=v=>t(v), igIcon=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>`;
+
+function renderChips(){
+  $("#chips").innerHTML=[["all","f_all"],["w","f_w"],["m","f_m"],["u","f_u"]].map(([v,k])=>`<button data-f="${v}" aria-pressed="${filter===v}">${t(k)}</button>`).join("");
+}
+function renderGrid(){
+  const q=query.trim().toLowerCase();
+  const list=live.filter(p=>(filter==="all"||p.g===filter)&&(!q||(p.brand+" "+p.name).toLowerCase().includes(q)));
+  $("#grid").innerHTML=list.length?list.map(p=>{const m=minPrice(p);return `
+  <button class="card" data-open="${p.id}">
+    <div class="im"><img src="${p.id}.jpg" alt="${esc(p.brand+" "+p.name)}" loading="lazy">${p.isNew?`<span class="new">${t("new")}</span>`:""}</div>
+    <div class="cb"><span class="b">${esc(p.brand)}</span><h3>${esc(p.name)}</h3><span class="p">${m!=null?t("from")+" "+fmt(m):t("ask")}</span></div>
+  </button>`}).join(""):`<p class="empty" style="grid-column:1/-1">${t("nothing")}</p>`;
+}
+function renderStatic(){
+  const o=CONFIG.versions.oil,g=CONFIG.versions.original,m=Math.min(...live.map(minPrice).filter(x=>x!=null));
+  $("#facts").innerHTML=`<span>${t("oil")}: ${o.sizes.join(" · ")} ${t("ml")}</span><span>${t("original")}: ${g.sizes.join(" · ")} ${t("ml")}</span>${isFinite(m)?`<span>${t("from")} ${fmt(m)}</span>`:""}`;
+  $("#vers").innerHTML=["oil","original"].map(v=>`<div><b>${t(v)}</b> · ${CONFIG.versions[v].sizes.join(" / ")} ${t("ml")}<p>${t(v+"_h")}</p></div>`).join("");
+  const a=[];
+  if(CONFIG.instagram)a.push(`<a href="https://instagram.com/${CONFIG.instagram}" target="_blank" rel="noopener">${igIcon.replace('<svg','<svg width="20" height="20"')} @${CONFIG.instagram}</a>`);
+  if(CONFIG.whatsapp)a.push(`<a href="https://wa.me/${CONFIG.whatsapp}" target="_blank" rel="noopener">WhatsApp: +${CONFIG.whatsapp}</a>`);
+  $("#contactList").innerHTML=a.join("<br>");
+}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-t]").forEach(e=>e.textContent=t(e.dataset.t));
+  document.querySelectorAll("[data-tp]").forEach(e=>e.placeholder=t(e.dataset.tp));
+  $("#l-ru").setAttribute("aria-pressed",lang==="ru");$("#l-en").setAttribute("aria-pressed",lang==="en");
+  $("#openCart").setAttribute("aria-label",t("cart"));
+  renderStatic();renderChips();renderGrid();renderCart();if(cur)renderProduct();
+}
+
+/* product sheet */
+function openProduct(id){
+  cur=id;const p=live.find(x=>x.id===id);
+  if(!CONFIG.versions[sel.v])sel.v="oil";
+  if(!verOf(p,sel.v).sizes.includes(sel.s))sel.s=verOf(p,sel.v).sizes[0];
+  renderProduct();open("#product");$("#product .scroll").scrollTop=0;
+}
+function renderProduct(){
+  const p=live.find(x=>x.id===cur);if(!p)return;
+  $("#pImg").src=`${p.id}.jpg`;$("#pImg").alt=p.brand+" "+p.name;
+  $("#pBrand").textContent=p.brand;$("#pName").textContent=p.name;$("#pFam").textContent=p.fam[lang]+" · "+t("g_"+p.g);$("#pDesc").textContent=p.d[lang];
+  $("#pVer").innerHTML=Object.keys(CONFIG.versions).map(v=>`<button data-v="${v}" aria-pressed="${sel.v===v}">${t(v)}<small>${t(v+"_s")}</small></button>`).join("");
+  $("#pHint").textContent=t(sel.v+"_h");
+  $("#pSize").innerHTML=verOf(p,sel.v).sizes.map(s=>`<button data-s="${s}" aria-pressed="${sel.s===s}">${s} ${t("ml")}</button>`).join("");
+  $("#pPyr").innerHTML=["top","heart","base"].map((k,i)=>`<div><dt>${t(k)}</dt><dd>${p.n[lang][i].join(", ")}</dd></div>`).join("");
+  const x=priceOf(p,sel.v,sel.s);
+  $("#pPrice").textContent=x==null?t("ask"):priceText(x);
+  $("#pNote").textContent=x==null?"":Array.isArray(x)?t("range"):t("fixed");
+}
+
+/* cart */
+function addToCart(){
+  const f=cart.find(c=>c.id===cur&&c.v===sel.v&&c.s===sel.s);
+  f?f.q++:cart.push({id:cur,v:sel.v,s:sel.s,q:1});save();toast(t("added"));
+}
+function save(){store.set("mdp_cart2",cart);renderCart()}
+function totals(list){
+  let a=0,b=0,unk=false;
+  list.forEach(c=>{const p=live.find(x=>x.id===c.id),x=priceOf(p,c.v,c.s);if(x==null)unk=true;else{a+=lo(x)*c.q;b+=hi(x)*c.q}});
+  return {a,b,unk,txt:a?(a===b?fmt(a):`${fmt(a)} – ${fmt(b)}`)+(unk?" + …":""):"—"};
+}
+function renderCart(){
+  const n=cart.reduce((s,c)=>s+c.q,0),tt=totals(cart);
+  $("#badge").textContent=n||"";
+  $("#cartbar").classList.toggle("on",n>0&&!document.body.classList.contains("lock"));
+  $("#cbL").textContent=`${t("cart")} · ${n} ${t("pcs")}`;$("#cbR").textContent=tt.a?tt.txt+" →":t("checkout")+" →";
+  const empty=!cart.length;
+  $("#cfields").style.display=empty?"none":"";$("#cbar").style.display=empty?"none":"";
+  $("#items").innerHTML=empty?`<p class="empty">${t("empty")}</p>`:cart.map((c,i)=>{const p=live.find(x=>x.id===c.id),x=priceOf(p,c.v,c.s);
+    return `<div class="it"><img src="${p.id}.jpg" alt=""><div><b>${esc(p.name)}</b><small>${esc(p.brand)}</small><small>${t(c.v)} · ${c.s} ${t("ml")}</small>
+    <div class="qty"><button data-q="${i}" data-d="-1" aria-label="−">−</button><span>${c.q}</span><button data-q="${i}" data-d="1" aria-label="+">+</button></div></div>
+    <div class="ip">${x==null?"—":Array.isArray(x)?fmt(x[0]*c.q)+"<br><small>– "+fmt(x[1]*c.q)+"</small>":fmt(x*c.q)}<button class="rm" data-rm="${i}">${t("remove")}</button></div></div>`}).join("");
+  $("#total").textContent=tt.txt;$("#totNote").textContent=(tt.unk||tt.a!==tt.b)?t("partial"):"";
+  const w=$("#waBtn");w.style.display=CONFIG.whatsapp?"":"none";$("#pWa").style.display=CONFIG.whatsapp?"":"none";
+  if(CONFIG.whatsapp)w.href=`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(orderText(cart,true))}`;
+}
+function item(c){const p=live.find(x=>x.id===c.id);return `${p.name} (${p.brand}) — ${t(c.v+"_l")}, ${c.s} ${t("ml")}${c.q>1?" × "+c.q:""}`}
+function cost(c){const p=live.find(x=>x.id===c.id),x=priceOf(p,c.v,c.s);return x==null?null:priceText(Array.isArray(x)?[x[0]*c.q,x[1]*c.q]:x*c.q)}
+function orderText(list,withFields){
+  const L=[];
+  if(list.length===1){const c=list[0],k=cost(c);L.push(`${t("want")} ${item(c)}.`);L.push(k?`${t("site_price")}: ${k}.`:t("ask_price"))}
+  else{L.push(t("want_list"));list.forEach((c,i)=>{const k=cost(c);L.push(`${i+1}. ${item(c)}${k?" — "+k:""}`)});
+    const tt=totals(list);if(tt.a)L.push("",`${t("o_total")}: ${tt.txt}`)}
+  if(withFields){const n=$("#cName").value.trim(),m=$("#cNote").value.trim();if(n||m)L.push("");if(n)L.push(`${t("o_name")}: ${n}`);if(m)L.push(`${t("o_note")}: ${m}`)}
+  return L.join("\n");
+}
+function copyText(txt){
+  const fb=()=>{const a=document.createElement("textarea");a.value=txt;a.setAttribute("readonly","");a.style.position="fixed";a.style.opacity="0";document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(e){}a.remove()};
+  try{return navigator.clipboard.writeText(txt).catch(fb)}catch(e){fb();return Promise.resolve()}
+}
+let goTxt="";
+function setCopied(ok){$("#goCopy").textContent=t(ok?"go_copied":"go_copy")}
+function sendIG(txt){
+  goTxt=txt;$("#goMsg").textContent=txt;
+  $("#goLink").href=`https://ig.me/m/${CONFIG.instagram}`;$("#goLink").textContent=t("go_btn");
+  setCopied(false);$("#go").classList.add("on");
+  copyText(txt).then(()=>setCopied(true));
+}
+/* overlays */
+function open(sel_){closeSheets(true);$(sel_).classList.add("on");$("#scrim").classList.add("on");document.body.classList.add("lock");renderCart()}
+function closeSheets(keep){document.querySelectorAll(".sheet.on").forEach(e=>e.classList.remove("on"));if(!keep){$("#scrim").classList.remove("on");document.body.classList.remove("lock");cur=null;renderCart()}}
+let tm;function toast(m){const e=$("#toast");e.textContent=m;e.classList.add("on");clearTimeout(tm);tm=setTimeout(()=>e.classList.remove("on"),1500)}
+
+document.addEventListener("click",e=>{
+  const el=e.target.closest("[data-f],[data-open],[data-v],[data-s],[data-q],[data-rm],[data-close]");if(!el)return;
+  const d=el.dataset;
+  if(d.f){filter=d.f;renderChips();renderGrid()}
+  else if(d.open)openProduct(d.open);
+  else if(d.v){sel.v=d.v;const p=live.find(x=>x.id===cur),z=verOf(p,sel.v).sizes;if(!z.includes(sel.s))sel.s=z[0];renderProduct()}
+  else if(d.s){sel.s=+d.s;renderProduct()}
+  else if(d.q!=null){const c=cart[+d.q];c.q+=+d.d;if(c.q<1)cart.splice(+d.q,1);save()}
+  else if(d.rm!=null){cart.splice(+d.rm,1);save()}
+  else if(d.close!=null)closeSheets();
+});
+$("#q").addEventListener("input",e=>{query=e.target.value;renderGrid()});
+$("#pAdd").addEventListener("click",addToCart);
+$("#pBuy").addEventListener("click",()=>sendIG(orderText([{id:cur,v:sel.v,s:sel.s,q:1}],false)));
+function sendWA(txt){const u=`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(txt)}`;let w=null;try{w=window.open(u,"_blank")}catch(e){}if(!w)location.href=u}
+$("#pWa").addEventListener("click",()=>sendWA(orderText([{id:cur,v:sel.v,s:sel.s,q:1}],false)));
+$("#cBuy").addEventListener("click",()=>sendIG(orderText(cart,true)));
+$("#copyBtn").addEventListener("click",()=>copyText(orderText(cart,true)).then(()=>toast(t("copied"))));
+$("#openCart").addEventListener("click",()=>open("#cart"));
+$("#cartbarBtn").addEventListener("click",()=>open("#cart"));
+$("#scrim").addEventListener("click",()=>closeSheets());
+$("#goClose").addEventListener("click",()=>$("#go").classList.remove("on"));
+$("#goCopy").addEventListener("click",()=>copyText(goTxt).then(()=>setCopied(true)));
+$("#goLink").addEventListener("click",()=>copyText(goTxt));
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeSheets();$("#go").classList.remove("on")}});
+["#cName","#cNote"].forEach(s=>$(s).addEventListener("input",()=>{if(CONFIG.whatsapp)$("#waBtn").href=`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(orderText(cart,true))}`}));
+$("#l-ru").addEventListener("click",()=>{lang="ru";store.set("mdp_lang",lang);applyLang()});
+$("#l-en").addEventListener("click",()=>{lang="en";store.set("mdp_lang",lang);applyLang()});
+/* swipe down to close sheets on phones */
+document.querySelectorAll(".sheet").forEach(sh=>{let y0=null;sh.querySelector(".grab").parentElement.addEventListener("touchstart",e=>{const sc=sh.querySelector(".scroll");y0=(sc.scrollTop<=0)?e.touches[0].clientY:null},{passive:true});sh.addEventListener("touchend",e=>{if(y0!=null&&e.changedTouches[0].clientY-y0>90)closeSheets();y0=null},{passive:true})});
+applyLang();
+}
+</script>
+</body>
+</html>
